@@ -1,14 +1,42 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+
 import Home from "../views/Home.vue";
+
+// Home Menu
+import Main from "../views/HomeMenu/Main.vue";
+import Play from "../views/HomeMenu/Play.vue";
+import Host from "../views/HomeMenu/Host.vue";
+import Join from "../views/HomeMenu/Join.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    name: "Home",
     component: Home,
+    children: [
+      {
+        path: "/",
+        name: "Home",
+        component: Main,
+      },
+      {
+        path: "/play",
+        name: "Play",
+        component: Play,
+      },
+      {
+        path: "/host",
+        name: "Host",
+        component: Host,
+      },
+      {
+        path: "/join",
+        name: "Join",
+        component: Join,
+      },
+    ],
   },
   // {
   //   path: "/about",

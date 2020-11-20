@@ -4,4 +4,11 @@
   </div>
 </template>
 
-<style></style>
+<style>
+#app {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  margin: 0;
+}
+</style>
