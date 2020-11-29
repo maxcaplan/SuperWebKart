@@ -92,7 +92,7 @@ export default {
     async createRoom() {
       try {
         const response = await this.$http.get(
-          "http://localhost:8080/api/createroom/"
+          "https://super-web-kart.uc.r.appspot.com/api/createroom/"
         );
         console.log(response);
         this.id = response.data;
