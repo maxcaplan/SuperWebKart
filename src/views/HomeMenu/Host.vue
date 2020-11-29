@@ -1,39 +1,10 @@
 <template>
-  <div class="host">
-    <div class="row d-flex justify-content-center mb-3">
-      <div class="col-auto">
-        <h1 class="text-center d-flex align-items-center">
-          Host:
-          <a
-            href="#"
-            @click.prevent="copyID"
-            ref="copy"
-            class="copy badge bg-secondary text-decoration-none fs-4 ml-2"
-          >
-            <span class="copy-text">
-              <span ref="copyText">{{ peerID }}</span>
-              <svg class="feather ml-2">
-                <use
-                  xlink:href="@/assets/icons/feather-sprite.svg#clipboard"
-                /></svg
-            ></span>
-
-            <transition name="fade">
-              <span class="copied" v-if="copied">
-                Copied!
-                <svg class="feather ml-2">
-                  <use xlink:href="@/assets/icons/feather-sprite.svg#check" />
-                </svg>
-              </span>
-            </transition>
-          </a>
-        </h1>
-      </div>
-    </div>
+  <div id="host">
+    <h1 class="text-center mb-3">Host:</h1>
 
     <div class="row d-flex justify-content-center mb-3">
       <div class="col col-md-6">
-        <div class="row">
+        <div class="row mb-3">
           <div class="col-auto"><h3>Name:</h3></div>
           <div class="col">
             <input
@@ -45,35 +16,49 @@
             />
           </div>
         </div>
-      </div>
-    </div>
 
-    <div class="row d-flex justify-content-center mb-3">
-      <div class="col col-md-6">
-        <div class="w-100 d-flex justify-content-end">
-          <button class="btn btn-success btn-lg">
-            Start
-            <svg class="feather mr-1">
-              <use xlink:href="@/assets/icons/feather-sprite.svg#arrow-right" />
-            </svg>
-          </button>
+        <div class="row">
+          <div class="col-auto">
+            <h3 class="m-0">Public:</h3>
+          </div>
+          <div class="col d-flex align-items-center">
+            <div class="form-check form-switch m-0">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="publicSwitch"
+                v-model="isPublic"
+                disabled
+              />
+              <label class="form-check-label" for="publicSwitch"
+                >Feature in progress</label
+              >
+            </div>
+          </div>
         </div>
 
         <hr />
-      </div>
-    </div>
 
-    <div class="row d-flex justify-content-center">
-      <div class="col-auto">
-        <router-link
-          to="/play"
-          class="btn btn-lg btn-danger d-flex justify-content-center align-items-center"
-        >
-          <svg class="feather mr-1">
-            <use xlink:href="@/assets/icons/feather-sprite.svg#arrow-left" />
-          </svg>
-          Back
-        </router-link>
+        <div class="row g-2">
+          <div class="col-12 col-sm">
+            <router-link to="/play" class="btn btn-lg btn-danger w-100">
+              <svg class="feather mr-1">
+                <use
+                  xlink:href="@/assets/icons/feather-sprite.svg#arrow-left"
+                /></svg
+              >Back</router-link
+            >
+          </div>
+          <div class="col-12 col-sm">
+            <button
+              class="btn btn-lg btn-success w-100"
+              @click="createRoom"
+              :disabled="!name"
+            >
+              Create Lobby
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -82,11 +67,12 @@
 <script>
 export default {
   name: "Host",
+
   data() {
     return {
-      peerID: "",
-      copied: false,
       name: "",
+      isPublic: false,
+      id: null,
     };
   },
 
@@ -97,69 +83,31 @@ export default {
   },
 
   methods: {
-    genID(len) {
-      const alph = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      let out = "";
-
-      for (let i = 0; i < len; i++) {
-        out += alph[Math.round(Math.random() * (alph.length - 1))];
-      }
-
-      return out;
-    },
-
-    async copyID() {
-      if (!this.copied) {
-        try {
-          await navigator.clipboard.writeText(this.$refs.copyText.innerHTML);
-          this.copied = true;
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          this.copied = false;
-        } catch (e) {
-          console.error(e);
-        }
-      }
-    },
-
     checkName() {
       this.name = this.name.replace(/[^\w\s]/gi, "");
       if (this.name.length > 20) this.name = this.name.slice(0, 20);
+
+      this.$store.dispatch("setName", this.name);
+    },
+    async createRoom() {
+      try {
+        const response = await this.$http.get(
+          "http://localhost:8080/api/createroom/"
+        );
+        console.log(response);
+        this.id = response.data;
+
+        this.$router.push("/lobby/" + this.id);
+      } catch (e) {
+        console.error(e);
+      }
     },
   },
 
   mounted() {
-    this.peerID = this.genID(6);
+    this.name = this.$store.state.name || "";
   },
 };
 </script>
 
-<style scoped>
-.copy {
-  position: relative;
-  overflow: hidden;
-}
-
-.copy:hover {
-  color: var(--bs-light);
-}
-
-.copied {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: var(--bs-secondary);
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.25s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
-}
-</style>
+<style scoped></style>

@@ -1,13 +1,17 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from "../store";
 
 import Home from "../views/Home.vue";
+import Lobby from "../views/Lobby.vue";
 
 // Home Menu
 import Main from "../views/HomeMenu/Main.vue";
 import Play from "../views/HomeMenu/Play.vue";
 import Host from "../views/HomeMenu/Host.vue";
 import Join from "../views/HomeMenu/Join.vue";
+
+import PageNotFound from "../views/PageNotFound.vue";
 
 Vue.use(VueRouter);
 
@@ -32,11 +36,27 @@ const routes = [
         component: Host,
       },
       {
-        path: "/join",
+        path: "/join/:id?",
         name: "Join",
         component: Join,
       },
     ],
+  },
+  {
+    path: "/lobby/:id",
+    name: "Lobby",
+    component: Lobby,
+    beforeEnter: (to, from, next) => {
+      if (store.state.name) {
+        next();
+      } else {
+        next("/join/" + to.params.id);
+      }
+    },
+  },
+  {
+    path: "*",
+    component: PageNotFound,
   },
   // {
   //   path: "/about",

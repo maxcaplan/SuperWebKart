@@ -8,8 +8,68 @@ body {
 
 /* Icon Classes */
 .feather {
-  width: 24px;
-  height: 24px;
+  width: 1.333em;
+  height: 1.333em;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.feather-sm {
+  width: 0.875em;
+  height: 0.875em;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.feather-2x {
+  width: 2em;
+  height: 2em;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.feather-3x {
+  width: 3em;
+  height: 3em;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.feather-5x {
+  width: 5em;
+  height: 5em;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.feather-7x {
+  width: 7em;
+  height: 7em;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.feather-10x {
+  width: 10em;
+  height: 10em;
   stroke: currentColor;
   stroke-width: 2;
   stroke-linecap: round;
