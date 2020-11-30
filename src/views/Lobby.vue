@@ -12,7 +12,7 @@
           Back
         </button>
 
-        <button class="btn btn-success" disabled>
+        <button v-if="isHost" class="btn btn-success" @click="startGame">
           Start
           <svg class="feather ml-1">
             <use xlink:href="@/assets/icons/feather-sprite.svg#arrow-right" />
@@ -120,6 +120,7 @@ export default {
   data() {
     return {
       socket: null,
+      peer: null,
       players: [],
       copying: false,
     };
@@ -131,6 +132,17 @@ export default {
     },
     name() {
       return this.$store.state.name;
+    },
+    isHost() {
+      if (this.socket && this.players && this.players.length) {
+        let user = this.players.find((player) => {
+          return player.id == this.socket.id;
+        });
+
+        return user && user.host ? true : false;
+      } else {
+        return false;
+      }
     },
   },
 
@@ -147,13 +159,23 @@ export default {
         }
       }
     },
+
+    startGame() {
+      return;
+    },
   },
 
   mounted() {
-    this.socket = new io("https://super-web-kart.uc.r.appspot.com");
+    this.socket = new io(process.env.VUE_APP_SERVER_HOST);
     this.socket.on("connect", () => {
       console.log(this.socket.id);
       this.socket.emit("join-room", this.roomId, this.name);
+
+      // this.peer = new Peer(this.socket.id, {
+      //   host: process.env.VUE_APP_PEER_HOST,
+      //   port: process.env.VUE_APP_PEER_PORT,
+      //   path: process.env.VUE_APP_PEER_PATH,
+      // });
     });
 
     this.socket.on("user-connected", (val) => {

@@ -42,7 +42,7 @@ export default {
     formatDate(time) {
       let D = new Date(time);
       let m = D.getMinutes();
-      m = m > 10 ? m : m + "0";
+      m = m >= 10 ? m : m + "0";
       return D.getHours() + ":" + m;
     },
   },

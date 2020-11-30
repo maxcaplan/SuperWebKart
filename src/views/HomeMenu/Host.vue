@@ -92,7 +92,7 @@ export default {
     async createRoom() {
       try {
         const response = await this.$http.get(
-          "https://super-web-kart.uc.r.appspot.com/api/createroom/"
+          process.env.VUE_APP_SERVER_HOST + "/api/createroom/"
         );
         console.log(response);
         this.id = response.data;
